@@ -8,11 +8,8 @@ import com.openclassrooms.magicgithub.R
 import com.openclassrooms.magicgithub.model.User
 import com.openclassrooms.magicgithub.utils.UserDiffCallback
 
-class UserListAdapter(  // FOR CALLBACK ---
-    private val callback: Listener
-) : RecyclerView.Adapter<ListUserViewHolder>() {
-    // FOR DATA ---
-    private var users: List<User> = ArrayList()
+class UserListAdapter(private val callback: Listener) : RecyclerView.Adapter<ListUserViewHolder>() {
+    private var users: MutableList<User> = ArrayList()
 
     interface Listener {
         fun onClickDelete(user: User)
@@ -29,14 +26,20 @@ class UserListAdapter(  // FOR CALLBACK ---
         holder.bind(users[position], callback)
     }
 
-    override fun getItemCount(): Int {
-        return users.size
-    }
+    override fun getItemCount(): Int = users.size
 
-    // PUBLIC API ---
     fun updateList(newList: List<User>) {
         val diffResult = DiffUtil.calculateDiff(UserDiffCallback(newList, users))
-        users = newList
+        users.clear()
+        users.addAll(newList)
         diffResult.dispatchUpdatesTo(this)
     }
+
+    fun moveItem(fromPosition: Int, toPosition: Int) {
+        val user = users.removeAt(fromPosition)
+        users.add(toPosition, user)
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun getUserAt(position: Int): User = users[position]
 }

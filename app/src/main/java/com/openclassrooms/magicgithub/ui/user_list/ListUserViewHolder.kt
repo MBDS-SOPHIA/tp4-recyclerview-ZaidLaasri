@@ -1,5 +1,6 @@
 package com.openclassrooms.magicgithub.ui.user_list
 
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -22,7 +23,13 @@ class ListUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .apply(RequestOptions.circleCropTransform())
             .into(avatar)
         username.text = user.login
+
+        // Modifier le background en fonction de l'état actif/inactif
+        val backgroundColor = if (user.isActive) Color.WHITE else Color.RED
+        itemView.setBackgroundColor(backgroundColor)
+
         deleteButton.setOnClickListener { callback.onClickDelete(user) }
     }
+
 
 }

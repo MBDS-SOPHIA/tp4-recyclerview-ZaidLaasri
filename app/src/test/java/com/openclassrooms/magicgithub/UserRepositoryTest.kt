@@ -55,4 +55,20 @@ class UserRepositoryTest {
         userRepository.deleteUser(userToDelete)
         Assert.assertFalse(userRepository.getUsers().contains(userToDelete))
     }
+
+    @Test
+    fun testSwipeToDeactivateUser() {
+        val user = userRepository.getUsers()[0]
+
+        val initialState = user.isActive
+        assertEquals("L'état initial doit être correct", initialState, user.isActive)
+
+        user.isActive = !initialState
+
+        assertEquals("L'état doit avoir changé", !initialState, user.isActive)
+
+        user.isActive = initialState
+        assertEquals("L'état doit être revenu à l'initial", initialState, user.isActive)
+    }
+
 }
